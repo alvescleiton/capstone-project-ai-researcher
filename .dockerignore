@@ -1,0 +1,24 @@
+# Contexto de build dos Dockerfiles em infra/docker/ (context: raiz do monorepo).
+# O estágio `pruner` faz `COPY . .` — sem este arquivo, tudo abaixo ia pro build.
+
+# Dependências e saídas de build: o Dockerfile instala e builda do zero, dentro da imagem.
+# Copiar as locais deixaria o build lento e poderia misturar artefato da máquina com o da imagem.
+**/node_modules
+**/dist
+**/.turbo
+**/.angular
+
+# Cache bruto da CVM (ZIPs/CSVs, ~2 GB). Nunca é versionado nem usado em runtime —
+# só os JSONs normalizados em packages/corpus/data/ entram, e esses continuam no contexto.
+packages/corpus/.cache
+
+# Variáveis locais: produção recebe tudo do Secret Manager, nunca de um .env.
+.env
+.env.*
+!.env.example
+
+# Artefatos de teste e ferramentas locais.
+**/coverage
+**/test-results
+**/playwright-report
+.git
