@@ -95,16 +95,13 @@ jobs:
           region: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/api:${{ github.sha }}
+          # Só o DATABASE_URL por enquanto: Langfuse (G.1), Serper (D) e OTEL/Grafana (G.3)
+          # voltam aqui junto com os secrets deles no Secret Manager. Sem essas variáveis o
+          # código desliga cada integração sozinho — ver langfuse.ts e otel-metrics.ts.
           secrets: |-
             DATABASE_URL=database-url:latest
-            LANGFUSE_PUBLIC_KEY=langfuse-public-key:latest
-            LANGFUSE_SECRET_KEY=langfuse-secret-key:latest
-            SERPER_API_KEY=serper-api-key:latest
-            OTEL_EXPORTER_OTLP_HEADERS=otel-exporter-otlp-headers:latest
           env_vars: |-
             GOOGLE_CLOUD_PROJECT_ID=${{ env.PROJECT_ID }}
-            LANGFUSE_BASE_URL=https://us.cloud.langfuse.com
-            OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp-gateway-prod-sa-east-1.grafana.net/otlp
           flags: --add-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:ai-researcher-db
           no_traffic: true
           tag: canary
@@ -122,16 +119,13 @@ jobs:
           region: ${{ env.REGION }}
           project_id: ${{ env.PROJECT_ID }}
           image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/api:${{ github.sha }}
+          # Só o DATABASE_URL por enquanto: Langfuse (G.1), Serper (D) e OTEL/Grafana (G.3)
+          # voltam aqui junto com os secrets deles no Secret Manager. Sem essas variáveis o
+          # código desliga cada integração sozinho — ver langfuse.ts e otel-metrics.ts.
           secrets: |-
             DATABASE_URL=database-url:latest
-            LANGFUSE_PUBLIC_KEY=langfuse-public-key:latest
-            LANGFUSE_SECRET_KEY=langfuse-secret-key:latest
-            SERPER_API_KEY=serper-api-key:latest
-            OTEL_EXPORTER_OTLP_HEADERS=otel-exporter-otlp-headers:latest
           env_vars: |-
             GOOGLE_CLOUD_PROJECT_ID=${{ env.PROJECT_ID }}
-            LANGFUSE_BASE_URL=https://us.cloud.langfuse.com
-            OTEL_EXPORTER_OTLP_ENDPOINT=https://otlp-gateway-prod-sa-east-1.grafana.net/otlp
           flags: --add-cloudsql-instances=${{ env.PROJECT_ID }}:${{ env.REGION }}:ai-researcher-db
 
       - name: Healthcheck da revisão nova
