@@ -2,7 +2,11 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  // Dois timeouts, porque são duas formas diferentes de o banco estar fora do ar:
+  // não aceitar conexão (connectionTimeoutMillis) ou aceitar e nunca responder (query_timeout).
+  // Sem o segundo, um banco travado deixaria o /health pendurado em vez de responder degraded.
   connectionTimeoutMillis: 2000,
+  query_timeout: 2000,
 });
 
 // Erro em cliente ocioso do pool (ex.: banco derrubou a conexão) emite 'error' no Pool.
